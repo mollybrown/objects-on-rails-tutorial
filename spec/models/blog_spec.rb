@@ -13,6 +13,14 @@ describe Blog do
     @it.entries.must_be_empty
   end
 
+  describe "#add_entry" do
+    it "adds the entry to the blog" do
+      entry = Object.new
+      @it.add_entry(entry)
+      @it.entries.must_include(entry)
+    end
+  end
+
   describe "#new_post" do
     before do
       @new_post = OpenStruct.new
@@ -26,6 +34,15 @@ describe Blog do
     it "sets the post's blog reference to itself" do
       @it.new_post.blog.must_equal(@it)
     end
+
+    it "accepts an attribute hash on behalf of the post maker" do
+      post_source = Minitest::Mock.new
+      post_source.expect(:call, @new_post, [{x: 42, y: 'z'}])
+      @it.post_source = post_source
+      @it.new_post(x: 42, y: 'z')
+      post_source.verify # Verify that all methods were called as expected. Raises MockExpectationError if the mock object was not called as expected.
+    end
+
   end
 
 end

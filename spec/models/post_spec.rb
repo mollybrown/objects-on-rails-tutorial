@@ -27,6 +27,12 @@ describe Post do
     @it.blog.must_equal(blog)
   end
 
+  it "supports setting attributes in the initializer" do
+    it = Post.new(title: "thetitle", body: "thebody")
+    it.title.must_equal("thetitle")
+    it.body.must_equal("thebody")
+  end
+
   describe "#publish" do
     before do
       @blog = Minitest::Mock.new
